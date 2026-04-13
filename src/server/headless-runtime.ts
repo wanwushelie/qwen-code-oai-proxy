@@ -14,6 +14,7 @@ const { mcpGetHandler, mcpPostHandler } = require("../mcp.js") as any;
 const { createApiKeyMiddleware } = require("./middleware/api-key.js") as any;
 const { QwenOpenAIProxy } = require("./proxy-controller.js") as any;
 const { createHealthHandler } = require("./health-handler.js") as any;
+const { registerAdminUi } = require("./admin-ui.js") as any;
 const { registerShutdownHandlers, initializeServerRuntime, shutdownServerRuntime } = require("./lifecycle.js") as any;
 const { createRuntimeLogLevelGetHandler, createRuntimeLogLevelPostHandler } = require("./runtime-control-handler.js") as any;
 const { createTypedCoreServices } = require("./typed-core-bridge.js") as any;
@@ -49,6 +50,7 @@ export function createHeadlessAppRuntime(): {
   app.use("/v1/", validateApiKey);
   app.use("/auth/", validateApiKey);
   app.use("/runtime/", validateApiKey);
+  app.use("/admin/api/", validateApiKey);
 
   app.post("/v1/chat/completions", (req: any, res: any) => {
     void proxy.handleChatCompletion(req, res);
@@ -73,6 +75,7 @@ export function createHeadlessAppRuntime(): {
   app.get("/mcp", mcpGetHandler);
   app.post("/mcp", mcpPostHandler);
   app.get("/health", createHealthHandler({ qwenAPI, authService }));
+  registerAdminUi(app, qwenAPI, runtimeConfigStore, fileLogger);
 
   return {
     app,

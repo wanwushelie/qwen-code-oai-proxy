@@ -99,6 +99,23 @@ Thumbs.db
 # Environment files
 .env*
 !.env.example
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Secrets and credentials
+secrets/
+secret/
+*.secret
+*.secrets
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+oauth_creds*.json
+**/oauth_creds*.json
 
 # Temporary files
 tmp/
@@ -122,6 +139,21 @@ test-proxy.js
 
 # Debug logs
 debug/
+
+# Runtime / local data
+data/
+runtime/
+logs/
+*.db
+*.sqlite
+*.sqlite3
+*.bak
+*.backup
+
+# Local exports / archives
+*.zip
+*.tar
+*.tar.gz
 
 # LLM managed files
 .llm/

@@ -7,6 +7,7 @@ export interface RuntimeConfig {
   port?: number;
   host?: string;
   autoStart?: boolean;
+  defaultAccount?: string;
   theme?: string;
   selectionStyle?: string;
   updatedAt: string;
@@ -118,6 +119,7 @@ export class RuntimeConfigStore {
       port: typeof parsed.port === "number" && parsed.port > 0 ? parsed.port : undefined,
       host: typeof parsed.host === "string" && parsed.host.length > 0 ? parsed.host : undefined,
       autoStart: typeof parsed.autoStart === "boolean" ? parsed.autoStart : undefined,
+      defaultAccount: typeof parsed.defaultAccount === "string" && parsed.defaultAccount.length > 0 ? parsed.defaultAccount : undefined,
       theme: normalizeTheme(parsed.theme),
       selectionStyle: normalizeSelectionStyle(parsed.selectionStyle),
       updatedAt: parsed.updatedAt ?? defaultConfig.updatedAt,
@@ -131,6 +133,7 @@ export class RuntimeConfigStore {
       port: input.port !== undefined ? input.port : current.port,
       host: input.host !== undefined ? input.host : current.host,
       autoStart: input.autoStart !== undefined ? input.autoStart : current.autoStart,
+      defaultAccount: input.defaultAccount !== undefined ? (input.defaultAccount || undefined) : current.defaultAccount,
       theme: input.theme !== undefined ? (normalizeTheme(input.theme) ?? current.theme) : current.theme,
       selectionStyle: input.selectionStyle !== undefined ? (normalizeSelectionStyle(input.selectionStyle) ?? current.selectionStyle) : current.selectionStyle,
       updatedAt: nowIso(),
@@ -160,6 +163,15 @@ export class RuntimeConfigStore {
 
   async setServerConfig(input: { port?: number; host?: string; autoStart?: boolean }): Promise<RuntimeConfig> {
     return this.writeConfig(input);
+  }
+
+  async getDefaultAccount(): Promise<string | undefined> {
+    const config = await this.readConfig();
+    return config.defaultAccount;
+  }
+
+  async setDefaultAccount(defaultAccount?: string): Promise<RuntimeConfig> {
+    return this.writeConfig({ defaultAccount });
   }
 
   async getTuiPreferences(): Promise<{ theme: string | undefined; selectionStyle: string | undefined }> {

@@ -22,7 +22,7 @@ function loadSystemPrompt(): string | null {
   return fs.readFileSync(process.env.SYSTEM_PROMPT_FILE, "utf8");
 }
 
-function loadPersistedConfig(): { port?: number; host?: string; autoStart?: boolean } {
+function loadPersistedConfig(): { port?: number; host?: string; autoStart?: boolean; defaultAccount?: string } {
   try {
     const configPath = nodePath.join(os.homedir(), ".local", "share", "qwen-proxy", "config.json");
     const raw = fs.readFileSync(configPath, "utf8");
@@ -31,6 +31,7 @@ function loadPersistedConfig(): { port?: number; host?: string; autoStart?: bool
       port: typeof parsed.port === "number" && parsed.port > 0 ? parsed.port : undefined,
       host: typeof parsed.host === "string" && parsed.host.length > 0 ? parsed.host : undefined,
       autoStart: typeof parsed.autoStart === "boolean" ? parsed.autoStart : undefined,
+      defaultAccount: typeof parsed.defaultAccount === "string" && parsed.defaultAccount.length > 0 ? parsed.defaultAccount : undefined,
     };
   } catch {
     return {};
@@ -59,7 +60,7 @@ const config = {
   defaultTopK: parseInteger(process.env.DEFAULT_TOP_K, 20),
   defaultRepetitionPenalty: parseFloatValue(process.env.DEFAULT_REPETITION_PENALTY, 1.05),
   tokenRefreshBuffer: parseInteger(process.env.TOKEN_REFRESH_BUFFER, 30000),
-  defaultAccount: process.env.DEFAULT_ACCOUNT || "",
+  defaultAccount: process.env.DEFAULT_ACCOUNT || _persisted.defaultAccount || "",
   qwenCodeAuthUse: process.env.QWEN_CODE_AUTH_USE !== "false",
   maxRetries: parseInteger(process.env.MAX_RETRIES || "5", 5),
   retryDelayMs: parseInteger(process.env.RETRY_DELAY_MS || "1000", 1000),
