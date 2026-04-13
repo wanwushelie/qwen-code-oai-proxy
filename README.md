@@ -37,7 +37,7 @@ qwen-proxy
 qwen-proxy serve --headless
 ```
 
-将客户端指向 `http://localhost:8080/v1`。API 密钥可以是任意字符串。
+将客户端指向 `http://localhost:8006/v1`。服务器部署建议配置真实 `API_KEY`，不要使用任意字符串。
 
 ---
 
@@ -47,6 +47,7 @@ qwen-proxy serve --headless
 git clone https://github.com/aptdnfapt/qwen-code-oai-proxy
 cd qwen-code-oai-proxy
 cp .env.example .env
+## 编辑 .env，确认 PORT=8006
 docker compose up -d
 ```
 
@@ -57,7 +58,7 @@ docker compose up -d
 docker compose exec qwen-proxy node dist/src/cli/qwen-proxy.js auth add myaccount
 ```
 
-将客户端指向 `http://localhost:8080/v1`。
+将客户端指向 `http://localhost:8006/v1`。
 
 ---
 
@@ -167,7 +168,7 @@ import OpenAI from 'openai';
 
 const openai = new OpenAI({
   apiKey: 'fake-key',
-  baseURL: 'http://localhost:8080/v1'
+  baseURL: 'http://localhost:8006/v1'
 });
 
 const response = await openai.chat.completions.create({
@@ -180,7 +181,7 @@ console.log(response.choices[0].message.content);
 
 ### curl
 ```bash
-curl -X POST http://localhost:8080/v1/chat/completions \
+curl -X POST http://localhost:8006/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer fake-key" \
   -d '{
@@ -196,7 +197,7 @@ curl -X POST http://localhost:8080/v1/chat/completions \
 
 ### 流式响应
 ```bash
-curl -X POST http://localhost:8080/v1/chat/completions \
+curl -X POST http://localhost:8006/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer fake-key" \
   -d '{
@@ -215,7 +216,7 @@ curl -X POST http://localhost:8080/v1/chat/completions \
 免费网络搜索 — 1000 次请求/账户/天：
 
 ```bash
-curl -X POST http://localhost:8080/v1/web/search \
+curl -X POST http://localhost:8006/v1/web/search \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer fake-key" \
   -d '{"query": "最新的 AI 发展", "page": 1, "rows": 5}'
@@ -238,7 +239,7 @@ curl -X POST http://localhost:8080/v1/web/search \
       "npm": "@ai-sdk/openai-compatible",
       "name": "proxy",
       "options": {
-        "baseURL": "http://localhost:8080/v1"
+        "baseURL": "http://localhost:8006/v1"
       },
       "models": {
         "coder-model": {
@@ -275,7 +276,7 @@ curl -X POST http://localhost:8080/v1/web/search \
   "providers": {
     "proxy": {
       "type": "openai",
-      "base_url": "http://localhost:8080/v1",
+      "base_url": "http://localhost:8006/v1",
       "api_key": "",
       "models": [
         {
@@ -301,7 +302,7 @@ curl -X POST http://localhost:8080/v1/web/search \
   "Providers": [
     {
       "name": "qwen-code",
-      "api_base_url": "http://localhost:8080/v1/chat/completions/",
+      "api_base_url": "http://localhost:8006/v1/chat/completions/",
       "api_key": "any-string",
       "models": ["coder-model"],
       "transformer": {
@@ -322,7 +323,7 @@ curl -X POST http://localhost:8080/v1/web/search \
 ### Roo Code / Kilo Code / Cline
 
 1. 进入设置 → 选择 OpenAI Compatible
-2. 设置 URL：`http://localhost:8080/v1`
+2. 设置 URL：`http://localhost:8006/v1`
 3. API 密钥：任意随机字符串
 4. 模型：`coder-model`
 5. 禁用流式复选框（Roo Code / Kilo Code）
@@ -338,7 +339,7 @@ curl -X POST http://localhost:8080/v1/web/search \
   "mcp": {
     "qwen-web-search": {
       "type": "remote",
-      "url": "http://localhost:8080/mcp",
+      "url": "http://localhost:8006/mcp",
       "headers": {
         "Authorization": "Bearer your-api-key"
       }
@@ -375,7 +376,7 @@ API_KEY=key1,key2,key3
 
 | 变量 | 默认值 | 描述 |
 |----------|---------|-------------|
-| `PORT` | `8080` | 服务器端口 |
+| `PORT` | `8006` | 服务器端口 |
 | `HOST` | `localhost` | 绑定地址（Docker 使用 `0.0.0.0`） |
 | `API_KEY` | — | 逗号分隔的认证密钥 |
 | `DEFAULT_ACCOUNT` | — | 优先使用的账户 |
@@ -412,7 +413,7 @@ DEFAULT_ACCOUNT=my-primary-account
 ## 健康检查
 
 ```bash
-curl http://localhost:8080/health
+curl http://localhost:8006/health
 ```
 
 返回服务器状态、账户验证、Token 过期信息、请求计数。

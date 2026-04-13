@@ -2,13 +2,13 @@ services:
   qwen-proxy:
     build: .
     ports:
-      - "${PORT:-8080}:${PORT:-8080}"
+      - "${PORT:-8006}:${PORT:-8006}"
     volumes:
       - ~/.qwen:/root/.qwen
       - ~/.local/share/qwen-proxy:/root/.local/share/qwen-proxy
     environment:
       - NODE_ENV=production
-      - PORT=${PORT:-8080}
+      - PORT=${PORT:-8006}
       - HOST=${HOST:-0.0.0.0}
       - DEBUG_LOG=${DEBUG_LOG:-false}
       - LOG_FILE_LIMIT=${LOG_FILE_LIMIT:-20}
@@ -24,7 +24,7 @@ services:
           "CMD",
           "node",
           "-e",
-          "const req = require('http').request({ hostname: 'localhost', port: '${PORT:-8080}', path: '/health', method: 'GET', headers: { 'X-API-Key': '${API_KEY:-}' } }, (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }); req.on('error', () => process.exit(1)); req.end();",
+          "const req = require('http').request({ hostname: 'localhost', port: '${PORT:-8006}', path: '/health', method: 'GET', headers: { 'X-API-Key': '${API_KEY:-}' } }, (res) => { process.exit(res.statusCode === 200 ? 0 : 1) }); req.on('error', () => process.exit(1)); req.end();",
         ]
       interval: 30s
       timeout: 10s

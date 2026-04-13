@@ -476,10 +476,11 @@ function renderAdminPage(): string {
 
     function renderIntegrationGuide(summary) {
       const root = document.getElementById('integrationGuide');
-      const baseUrl = 'http://' + summary.host + ':' + summary.port + '/v1';
+      const currentBaseUrl = 'http://' + summary.host + ':' + summary.port + '/v1';
+      const deployBaseUrl = 'http://your-server-host:8006/v1';
       const maskedKey = getApiKey() ? getApiKey() : '在右侧 Connection 里填写 API Key';
       const curlExample = [
-        'curl -X POST ' + baseUrl + '/chat/completions',
+        'curl -X POST ' + deployBaseUrl + '/chat/completions',
         '  -H "Content-Type: application/json"',
         '  -H "Authorization: Bearer ' + maskedKey + '"',
         "  -d '{",
@@ -492,7 +493,7 @@ function renderAdminPage(): string {
         '',
         'client = OpenAI(',
         '    api_key="' + maskedKey + '",',
-        '    base_url="' + baseUrl + '"',
+        '    base_url="' + deployBaseUrl + '"',
         ')',
         '',
         'resp = client.chat.completions.create(',
@@ -506,7 +507,7 @@ function renderAdminPage(): string {
         '',
         'const client = new OpenAI({',
         '  apiKey: "' + maskedKey + '",',
-        '  baseURL: "' + baseUrl + '"',
+        '  baseURL: "' + deployBaseUrl + '"',
         '});',
         '',
         'const resp = await client.chat.completions.create({',
@@ -517,18 +518,19 @@ function renderAdminPage(): string {
         'console.log(resp.choices[0].message.content);',
       ].join('\\n');
       const healthExample = [
-        'GET http://' + summary.host + ':' + summary.port + '/health',
-        'GET ' + baseUrl + '/models',
+        'GET http://your-server-host:8006/health',
+        'GET ' + deployBaseUrl + '/models',
       ].join('\\n');
 
       root.innerHTML = [
-        '<div class="field"><label>Base URL</label><div class="mono">' + baseUrl + '</div></div>',
+        '<div class="field"><label>Current Base URL</label><div class="mono">' + currentBaseUrl + '</div></div>',
+        '<div class="field"><label>Recommended Deploy Base URL</label><div class="mono">' + deployBaseUrl + '</div></div>',
         '<div class="field"><label>API Key</label><div class="mono">' + maskedKey + '</div></div>',
         '<div class="field"><label>Recommended Models</label><div class="mono">coder-model / qwen3-coder-plus / qwen3-coder-flash</div></div>',
         '<div class="field"><label>curl</label><pre class="mono">' + curlExample + '</pre></div>',
         '<div class="field"><label>Python OpenAI SDK</label><pre class="mono">' + pythonExample + '</pre></div>',
         '<div class="field"><label>JavaScript / Node</label><pre class="mono">' + jsExample + '</pre></div>',
-        '<div class="field"><label>Desktop Clients</label><div>在 Cherry Studio、NextChat、LobeChat、Open WebUI 或其他 OpenAI 兼容客户端里填写：</div><ul><li>Provider: OpenAI-compatible</li><li>Base URL: <span class="mono">' + baseUrl + '</span></li><li>API Key: <span class="mono">' + maskedKey + '</span></li><li>Model: <span class="mono">coder-model</span></li></ul></div>',
+        '<div class="field"><label>Desktop Clients</label><div>在 Cherry Studio、NextChat、LobeChat、Open WebUI 或其他 OpenAI 兼容客户端里填写：</div><ul><li>Provider: OpenAI-compatible</li><li>Base URL: <span class="mono">' + deployBaseUrl + '</span></li><li>API Key: <span class="mono">' + maskedKey + '</span></li><li>Model: <span class="mono">coder-model</span></li></ul></div>',
         '<div class="field"><label>Health / Models</label><pre class="mono">' + healthExample + '</pre></div>',
         '<div class="hint">如果你启用了 API_KEY，所有 /v1 请求都必须带 Authorization: Bearer &lt;API_KEY&gt;。</div>',
       ].join('');

@@ -92,7 +92,7 @@ The proxy server can be configured using environment variables. Create a `.env` 
 - `ERROR_LOG_MAX_MB`: Rotate `error.log` when it reaches this size in MB (default: 10)
 - `ERROR_LOG_MAX_DAYS`: Keep rotated error logs for this many days (default: 30)
 - `HOST`: Server host (default: localhost)
-- `PORT`: Server port (default: 8080)
+- `PORT`: Server port (recommended deployment default: 8006)
 - `DEFAULT_ACCOUNT`: Specify which account the proxy should use by default (when using multi-account setup)
     - Should match the name used when adding an account with `npm run auth add <name>`
     - If not set or invalid, the proxy will use the first available account
