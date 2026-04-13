@@ -1,26 +1,26 @@
-# qwen-proxy — OpenAI-Compatible Proxy for Qwen Models
+# qwen-proxy — 兼容 OpenAI 的 Qwen 模型代理服务器
 
-Works with opencode, crush, claude code router, roo code, cline and anything that speaks the OpenAI API. Has tool calling and streaming support.
+支持 opencode、crush、claude code router、roo code、cline 以及任何兼容 OpenAI API 的工具。具备工具调用和流式响应支持。
 
-> **New** — Minimal terminal UI with full mouse support — lightweight, low resource usage. 
+> **新功能** — 极简终端 UI，完整鼠标支持 — 轻量级，低资源占用
 >
-> **New** — TUI themes: **dark**, **light**, **amber**, **contrast**. Change from **Settings** or press **t**. Theme saves to `~/.local/share/qwen-proxy/config.json`.
+> **新功能** — TUI 主题：**dark**（深色）、**light**（浅色）、**amber**（琥珀色）、**contrast**（高对比）。可在 **设置** 中更改或按 **t** 键切换。主题保存到 `~/.local/share/qwen-proxy/config.json`
 >
-> **New** — TUI selection style: **solid** or **transparent**. Transparent keeps row colors visible and uses a bold row + accent left marker.
+> **新功能** — TUI 选择样式：**solid**（实色）或 **transparent**（透明）。透明模式保持行颜色可见，并使用粗体行 + 左侧强调标记
 >
-> **New** — `coder-model` now points to **Qwen 3.6 Plus** (Qwen team updated the alias). `qwen3.5-plus` requires Coding Plan subscription and won't work with OAuth accounts.
+> **新功能** — `coder-model` 现在指向 **Qwen 3.6 Plus**（Qwen 团队更新了别名）。`qwen3.5-plus` 需要 Coding Plan 订阅，无法在 OAuth 账户下使用
 
-[Discord](https://discord.gg/6S7HwCxbMy)
+[Discord 社区](https://discord.gg/6S7HwCxbMy)
 
-**Important:** Users may hit 504 / timeout errors at 130k–150k+ token contexts — this is a Qwen upstream limit.
+**重要提示：** 用户可能在 130k-150k+ token 上下文时遇到 504 / 超时错误 — 这是 Qwen 上游限制。
 
-For a serverless/edge alternative: [qwen-worker-proxy](https://github.com/aptdnfapt/qwen-worker-proxy)
+无服务器/边缘计算替代方案：[qwen-worker-proxy](https://github.com/aptdnfapt/qwen-worker-proxy)
 
 ---
 
-## Quick Start
+## 快速开始
 
-### Option 1: npm (global install) (recommended)
+### 方式 1：npm（全局安装）（推荐）
 
 ```bash
 npm install -g qwen-proxy
@@ -29,19 +29,19 @@ npm install -g qwen-proxy
 ```bash
 qwen-proxy 
 
-# and then add some accounts from the tui . full mouse Supported
+# 然后从 TUI 添加账户，完整鼠标支持
 ```
 
-Or headless (background/server mode):
+或无头模式（后台/服务器模式）：
 ```bash
 qwen-proxy serve --headless
 ```
 
-Point your client at `http://localhost:8080/v1`. API key can be any string.
+将客户端指向 `http://localhost:8080/v1`。API 密钥可以是任意字符串。
 
 ---
 
-### Option 2: Docker . ( manual build )
+### 方式 2：Docker（手动构建）
 
 ```bash
 git clone https://github.com/aptdnfapt/qwen-code-oai-proxy
@@ -50,34 +50,34 @@ cp .env.example .env
 docker compose up -d
 ```
 
-The container mounts `~/.qwen` from your host — accounts you add are picked up live by the running container **without a restart**.
+容器从主机挂载 `~/.qwen` — 添加的账户会被运行中的容器**无需重启**立即识别。
 
-Add an account while the container is running:
+容器运行时添加账户：
 ```bash
 docker compose exec qwen-proxy node dist/src/cli/qwen-proxy.js auth add myaccount
 ```
 
-Point your client at `http://localhost:8080/v1`.
+将客户端指向 `http://localhost:8080/v1`。
 
 ---
 
-### Option 3: Local / Dev
+### 方式 3：本地/开发环境
 
 ```bash
 npm install
 npm run auth:add myaccount
 qwen-proxy serve
-# or headless:
+# 或无头模式：
 npm run serve:headless
 ```
 
 ---
 
-## CLI Commands
+## CLI 命令
 
 ```bash
-qwen-proxy serve                  # TUI dashboard
-qwen-proxy serve --headless       # headless server
+qwen-proxy serve                  # TUI 仪表板
+qwen-proxy serve --headless       # 无头服务器
 
 qwen-proxy auth list
 qwen-proxy auth add <account-id>
@@ -88,9 +88,9 @@ qwen-proxy usage
 
 ---
 
-## Dev Test Helpers
+## 开发测试辅助
 
-For fresh-machine regressions, use the built-in clean-home checks instead of ad-hoc shell probes:
+对于新机器回归测试，使用内置的 clean-home 检查而不是临时 shell 探测：
 
 ```bash
 npm run test:auth-clean-home
@@ -98,17 +98,17 @@ npm run test:first-run
 npm run test:install-smoke
 ```
 
-These scripts run the compiled code with a temporary `HOME`, so they simulate a new machine without touching your real `~/.qwen` or local usage database.
+这些脚本使用临时 `HOME` 运行编译后的代码，因此可以模拟新机器而不会触碰真实的 `~/.qwen` 或本地使用数据库。
 
-More detail: `docs/testing-clean-home.md`
+更多详情：`docs/testing-clean-home.md`
 
 ---
 
-## Multi-Account Support
+## 多账户支持
 
-The easiest way to add accounts is from the TUI — just run `qwen-proxy`, go to the **Accounts** tab, and add from there.
+最简单的添加账户方式是从 TUI — 运行 `qwen-proxy`，进入 **Accounts**（账户）标签页，从那里添加。
 
-You can also add via CLI:
+也可以通过 CLI 添加：
 
 ```bash
 qwen-proxy auth add account1
@@ -116,16 +116,16 @@ qwen-proxy auth add account2
 qwen-proxy auth add account3
 ```
 
-**How rotation works:**
-- Requests rotate round-robin across all valid accounts
-- Tokens refreshed ahead of expiry automatically
-- Auth failures → one refresh attempt → rotate to next account
-- Transient failures (429, 500, timeout) → rotate to next account, no cooldowns
-- Client errors (bad payload etc.) → returned immediately, no rotation
-- `DEFAULT_ACCOUNT` env var → that account is tried first
-- Request counts reset daily at UTC midnight
+**轮转工作原理：**
+- 请求在所有有效账户间轮询（round-robin）
+- Token 在过期前自动刷新
+- 认证失败 → 一次刷新尝试 → 轮转到下一个账户
+- 临时故障（429、500、超时）→ 轮转到下一个账户，无需冷却期
+- 客户端错误（错误负载等）→ 立即返回，不轮转
+- `DEFAULT_ACCOUNT` 环境变量 → 优先尝试该账户
+- 请求计数在 UTC 午夜重置
 
-**For Docker:**
+**Docker 用户：**
 ```bash
 docker compose exec qwen-proxy node dist/src/cli/qwen-proxy.js auth list
 docker compose exec qwen-proxy node dist/src/cli/qwen-proxy.js auth add <account-id>
@@ -134,32 +134,32 @@ docker compose exec qwen-proxy node dist/src/cli/qwen-proxy.js auth remove <acco
 
 ---
 
-## Supported Models
+## 支持的模型
 
-| Model ID | Description | Max Tokens | Notes |
+| 模型 ID | 描述 | 最大 Token | 备注 |
 |----------|-------------|------------|-------|
-| `coder-model` | **Recommended** — Qwen 3.6 Plus (alias, auto-updated by Qwen) | 65536 | Default, best for coding |
-| `qwen3.5-plus` | Alias → resolves to `coder-model` | 65536 | Kept for backward compatibility |
-| `qwen3.6-plus` | Alias → resolves to `coder-model` | 65536 | |
+| `coder-model` | **推荐** — Qwen 3.6 Plus（别名，Qwen 自动更新） | 65536 | 默认，最适合编程 |
+| `qwen3.5-plus` | 别名 → 解析为 `coder-model` | 65536 | 为向后兼容保留 |
+| `qwen3.6-plus` | 别名 → 解析为 `coder-model` | 65536 | |
 | `qwen3-coder-plus` | Qwen 3 Coder Plus | 65536 | |
-| `qwen3-coder-flash` | Qwen 3 Coder Flash | 65536 | Faster, lighter |
-| `vision-model` | Multimodal with image support | 32768 | Lower token limit, auto-clamped |
+| `qwen3-coder-flash` | Qwen 3 Coder Flash | 65536 | 更快，更轻量 |
+| `vision-model` | 多模态，支持图像 | 32768 | Token 限制较低，自动钳制 |
 
-> **Note:** `coder-model` is an alias maintained by Qwen. It was Qwen 3.5 Plus, now updated to Qwen 3.6 Plus. Both `qwen3.5-plus` and `qwen3.6-plus` resolve to `coder-model`.
-
----
-
-## Supported Endpoints
-
-- `POST /v1/chat/completions` — Chat completions (streaming + non-streaming)
-- `GET /v1/models` — List available models
-- `POST /v1/web/search` — Web search (2000 req/day free)
-- `GET/POST /mcp` — MCP server (SSE transport)
-- `GET /health` — Health check
+> **注意：** `coder-model` 是 Qwen 维护的别名。之前是 Qwen 3.5 Plus，现在更新为 Qwen 3.6 Plus。`qwen3.5-plus` 和 `qwen3.6-plus` 都解析为 `coder-model`。
 
 ---
 
-## Example Usage
+## 支持的端点
+
+- `POST /v1/chat/completions` — 聊天补全（流式 + 非流式）
+- `GET /v1/models` — 列出可用模型
+- `POST /v1/web/search` — 网络搜索（免费 2000 次/天）
+- `GET/POST /mcp` — MCP 服务器（SSE 传输）
+- `GET /health` — 健康检查
+
+---
+
+## 使用示例
 
 ### JavaScript / Node.js
 ```javascript
@@ -172,36 +172,36 @@ const openai = new OpenAI({
 
 const response = await openai.chat.completions.create({
   model: 'coder-model',
-  messages: [{ role: 'user', content: 'Hello!' }]
+  messages: [{ role: 'user', content: '你好！' }]
 });
 
 console.log(response.choices[0].message.content);
 ```
 
- ### curl
+### curl
 ```bash
 curl -X POST http://localhost:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer fake-key" \
   -d '{
     "model": "coder-model",
-    "messages": [{"role": "user", "content": "Hello!"}],
+    "messages": [{"role": "user", "content": "你好！"}],
     "temperature": 0.7,
     "max_tokens": 200,
     "reasoning": {"effort": "high"}
   }'
 ```
 
-> `effort` can be `"high"`, `"medium"`, `"low"`, or `"none"` (disables thinking).
+> `effort` 可以是 `"high"`、`"medium"`、`"low"` 或 `"none"`（禁用思考）。
 
-### Streaming
+### 流式响应
 ```bash
 curl -X POST http://localhost:8080/v1/chat/completions \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer fake-key" \
   -d '{
     "model": "coder-model",
-    "messages": [{"role": "user", "content": "Explain how to reverse a string in JavaScript."}],
+    "messages": [{"role": "user", "content": "解释如何在 JavaScript 中反转字符串。"}],
     "stream": true,
     "max_tokens": 300,
     "reasoning": {"effort": "medium"}
@@ -210,27 +210,26 @@ curl -X POST http://localhost:8080/v1/chat/completions \
 
 ---
 
-## Web Search API
+## 网络搜索 API
 
-Free web search — 1000 requests/account/day:
+免费网络搜索 — 1000 次请求/账户/天：
 
 ```bash
 curl -X POST http://localhost:8080/v1/web/search \
   -H "Content-Type: application/json" \
   -H "Authorization: Bearer fake-key" \
-  -d '{"query": "latest AI developments", "page": 1, "rows": 5}'
+  -d '{"query": "最新的 AI 发展", "page": 1, "rows": 5}'
 ```
 
 ---
 
-## AI Agent Configs
+## AI Agent 配置
 
 ### opencode
 
-Add to `~/.config/opencode/opencode.json`:
+添加到 `~/.config/opencode/opencode.json`：
 
-
-> `effort` can be `"high"`, `"medium"`, `"low"`, or `"none"` (disables thinking). change it from the ctrl-t key bind on opencode
+> `effort` 可以是 `"high"`、`"medium"`、`"low"` 或 `"none"`（禁用思考）。在 opencode 中通过 ctrl-t 快捷键更改
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
@@ -269,7 +268,7 @@ Add to `~/.config/opencode/opencode.json`:
 
 ### crush
 
-Add to `~/.config/crush/crush.json`:
+添加到 `~/.config/crush/crush.json`：
 ```json
 {
   "$schema": "https://charm.land/crush.json",
@@ -322,17 +321,17 @@ Add to `~/.config/crush/crush.json`:
 
 ### Roo Code / Kilo Code / Cline
 
-1. Go to settings → choose OpenAI Compatible
-2. Set URL: `http://localhost:8080/v1`
-3. API key: any random string
-4. Model: `coder-model`
-5. Disable streaming checkbox (Roo Code / Kilo Code)
-6. Max output: `32000`
-7. Context window: up to 300k (but past 150k gets slower)
+1. 进入设置 → 选择 OpenAI Compatible
+2. 设置 URL：`http://localhost:8080/v1`
+3. API 密钥：任意随机字符串
+4. 模型：`coder-model`
+5. 禁用流式复选框（Roo Code / Kilo Code）
+6. 最大输出：`32000`
+7. 上下文窗口：最高 300k（但超过 150k 会变慢）
 
-### MCP (web search tool)
+### MCP（网络搜索工具）
 
-Add to `~/.config/opencode/config.json`:
+添加到 `~/.config/opencode/config.json`：
 ```json
 {
   "$schema": "https://opencode.ai/config.json",
@@ -348,46 +347,46 @@ Add to `~/.config/opencode/config.json`:
 }
 ```
 
-Omit `headers` if you have no API key set. Works with other MCP clients too.
+如果没有设置 API 密钥，省略 `headers`。也适用于其他 MCP 客户端。
 
 ---
 
-## API Key Authentication
+## API 密钥认证
 
 ```bash
-# Single key
+# 单个密钥
 API_KEY=your-secret-key
 
-# Multiple keys
+# 多个密钥
 API_KEY=key1,key2,key3
 ```
 
-Supported headers:
+支持的请求头：
 - `Authorization: Bearer your-secret-key`
 - `X-API-Key: your-secret-key`
 
-If no API key is configured, no auth is required.
+如果未配置 API 密钥，则不需要认证。
 
 ---
 
-## Configuration
+## 配置
 
-Set via environment variables or `.env` file:
+通过环境变量或 `.env` 文件设置：
 
-| Variable | Default | Description |
+| 变量 | 默认值 | 描述 |
 |----------|---------|-------------|
-| `PORT` | `8080` | Server port |
-| `HOST` | `localhost` | Bind address (`0.0.0.0` for Docker) |
-| `API_KEY` | — | Comma-separated auth keys |
-| `DEFAULT_ACCOUNT` | — | Account to prefer first |
+| `PORT` | `8080` | 服务器端口 |
+| `HOST` | `localhost` | 绑定地址（Docker 使用 `0.0.0.0`） |
+| `API_KEY` | — | 逗号分隔的认证密钥 |
+| `DEFAULT_ACCOUNT` | — | 优先使用的账户 |
 | `LOG_LEVEL` | `error-debug` | `off` / `error` / `error-debug` / `debug` |
-| `MAX_DEBUG_LOGS` | `20` | Max request debug dirs to keep |
-| `QWEN_PROXY_HOME` | `~/.local/share/qwen-proxy` | Override runtime data dir |
-| `QWEN_PROXY_LOG_DIR` | — | Override log dir |
+| `MAX_DEBUG_LOGS` | `20` | 保留的最大请求调试目录数 |
+| `QWEN_PROXY_HOME` | `~/.local/share/qwen-proxy` | 覆盖运行时数据目录 |
+| `QWEN_PROXY_LOG_DIR` | — | 覆盖日志目录 |
 
-Compatibility aliases: `DEBUG_LOG=true` → `LOG_LEVEL=debug`, `LOG_FILE_LIMIT` → `MAX_DEBUG_LOGS`
+兼容别名：`DEBUG_LOG=true` → `LOG_LEVEL=debug`，`LOG_FILE_LIMIT` → `MAX_DEBUG_LOGS`
 
-Example `.env`:
+`.env` 示例：
 ```bash
 LOG_LEVEL=debug
 MAX_DEBUG_LOGS=10
@@ -395,56 +394,56 @@ API_KEY=your-secret-key
 DEFAULT_ACCOUNT=my-primary-account
 ```
 
-Port and host can also be changed from the TUI Settings screen and are saved to `config.json` automatically.
+端口和主机也可以从 TUI 设置屏幕更改，并自动保存到 `config.json`。
 
 ---
 
-## Storage
+## 存储
 
-| Path | Contents |
+| 路径 | 内容 |
 |------|----------|
-| `~/.qwen/oauth_creds_<id>.json` | Account credentials |
-| `~/.local/share/qwen-proxy/usage.db` | Request + token usage (SQLite) |
-| `~/.local/share/qwen-proxy/config.json` | Port, host, log level, auto-start |
-| `~/.local/share/qwen-proxy/log/` | Error logs |
+| `~/.qwen/oauth_creds_<id>.json` | 账户凭证 |
+| `~/.local/share/qwen-proxy/usage.db` | 请求 + Token 使用（SQLite） |
+| `~/.local/share/qwen-proxy/config.json` | 端口、主机、日志级别、自动启动 |
+| `~/.local/share/qwen-proxy/log/` | 错误日志 |
 
 ---
 
-## Health Check
+## 健康检查
 
 ```bash
 curl http://localhost:8080/health
 ```
 
-Returns server status, account validation, token expiry info, request counts.
+返回服务器状态、账户验证、Token 过期信息、请求计数。
 
 ---
 
-## Usage Tracking
+## 使用追踪
 
 ```bash
 qwen-proxy usage
-# or
+# 或
 npm run usage
 npm run tokens
 ```
 
-Shows daily token usage, cache hits, request counts per account. Also visible in the TUI Usage screen.
+显示每日 Token 使用量、缓存命中、每个账户的请求计数。也可在 TUI 使用屏幕查看。
 
 ---
 
-## Runtime Log Level
+## 运行时日志级别
 
-Change live without restart:
+无需重启即可实时更改：
 ```bash
-# inspect
+# 查看当前级别
 GET /runtime/log-level
 
-# change
+# 更改
 POST /runtime/log-level
 {"level": "debug"}
 
-# change without persisting
+# 更改但不持久化
 POST /runtime/log-level
 {"level": "error", "persist": false}
 ```
